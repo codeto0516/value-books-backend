@@ -27,9 +27,11 @@ model Book {
 
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+
+  Purchase     Purchase[]
 }
 
-model Employee {
+model User {
   id           String   @id @default(uuid())
   name        String
   email       String   @unique
@@ -38,4 +40,38 @@ model Employee {
 
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+
+  Purchase     Purchase[]
+  PurchaseHistory PurchaseHistory[]
+}
+
+model Purchase {
+  id           String   @id @default(uuid())
+  bookId       String 
+  userId       String
+  price        Float
+  status       Int
+  comment      String?
+  purchasedAt  DateTime?
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  Book         Book     @relation(fields: [bookId], references: [id])
+  User         User     @relation(fields: [userId], references: [id])
+  PurchaseHistory PurchaseHistory[]
+}
+
+model PurchaseHistory {
+  id           String   @id @default(uuid())
+  purchaseId   String
+  userId       String
+  description  String?
+  operation    Int
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  Purchase     Purchase @relation(fields: [purchaseId], references: [id])
+  User         User     @relation(fields: [userId], references: [id])
 }
